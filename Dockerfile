@@ -7,4 +7,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 
 EXPOSE 5000
-CMD ["python", "main_app.py"]
+CMD ["python", "meal_planner.py"]
