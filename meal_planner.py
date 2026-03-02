@@ -64,9 +64,6 @@ def allowed_file(filename):
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
-
-
-
 def save_recipe_image(uploaded_file, output_path, max_size=800):
     """Process with correct orientation."""
     img = Image.open(uploaded_file)
@@ -138,22 +135,32 @@ def update_settings():
     cur = con.cursor()
     
     if request.form['backupStatus'] == "on":
-        
         backupDir = request.form['backupDirectory']
-        backupFreq = int(request.form['backupFreq'])
-        backupStatus = request.form['backupStatus']
-        next_backup = backup_logic.turn_on_backups(backupFreq)
+        direcoryCheck = backup_logic.checkBackupDir(backupDir)
+        if direcoryCheck['testResult'] == True:
+            backupFreq = int(request.form['backupFreq'])
+            backupStatus = request.form['backupStatus']
+            next_backup = backup_logic.turn_on_backups(backupFreq, backupDir)
 
-        cur.execute("UPDATE settings SET backup_status = 'on', backup_location = ?, backup_frequency = ?",(backupDir, backupFreq))
-    
+            cur.execute("UPDATE settings SET backup_status = 'on', backup_location = ?, backup_frequency = ?",(backupDir, backupFreq))
+        else:
+            return {"ok": "false","error" : "<span style='color:red'>Cannot write to selected backup directory</span>"}
+
+
     elif request.form['backupStatus'] == "off":
         next_backup = backup_logic.turnOffBackups()
-        
         cur.execute("UPDATE settings SET backup_status = 'off', backup_location = '', backup_frequency = '' ")
 
     con.commit()
     con.close()
     return {"ok": "true","next_backup": next_backup}
+
+@app.route("/test_backup_dir", methods = ['POST'])
+def test_backup_dir():
+    testResult = backup_logic.checkBackupDir(request.form['backupDir'])
+    return {"testResult" : testResult['resultText']}
+
+
 
 @app.route("/test_api")
 def test_api():
@@ -350,8 +357,12 @@ def settings():
 
 @app.route("/backupDb")
 def backupDb():
-    shutil.copy("database.db","/home/lewis/Documents/")
-    return {"ok":"true"}
+    backupResult = backup_logic.backup_recipe_db()
+    if backupResult == True:
+        return {"ok":"true","text":"<span style='color:green'>Manual backup successful</span>"}
+    else:
+        return {"ok":"false","text":"<span style='color:red'>Error, backup not created</span>"}
+
 
 @app.route("/get_recipe_overview/<recipe_id>", methods=['GET']) 
 def get_recipe_overview(recipe_id):

@@ -23,7 +23,7 @@
         transition: max-height 0.9s ease;
       }
       #backupSettings.backupVisible {
-       max-height: 200px; /* adjust to fit your content */
+       max-height: 250px; /* adjust to fit your content */
       }
 
 
@@ -122,6 +122,7 @@
                   <input class="form-check-input" type="checkbox" role="switch" id="backupToggleSwitch" onchange="toggleBackupSettingsVis()">
                 </div>
                 <div id="backupSettings" class="mt-4">
+                  <div id="schedulerStatusText"></div>
                   <div id="nextBackupText"></div>
                   <select class="form-select" id="backupFrequency">
                     <option value="1">Daily</option>
@@ -131,9 +132,11 @@
                   
                   <label for="formFile" class="small">Backup Location</label>
                   <input class="form-control" type="text" id="backupDir" placeholder="e.g. /home/documents/backups/">
-                  <div id="schedulerStatusText"></div>
+                  <button class="btn btn-primary" id="backupTestButton" onclick="testBackupDir()"> Test Backup Directory</button>
+                  <button class="btn btn-primary" id="manualBackupButton" onclick="backupManual()"> Manual Backup</button>
+                  <div id="backupTestText"></div>
                 </div>
-                <div class="small alert p-1 mt-2" id="backupAlert">
+                <div class="small alert p-1 mt-2 alert-danger" id="backupAlert">
                     <!--insert backup info here via JS-->
                   </div>
                 </div>
@@ -167,8 +170,13 @@
       const schedulerStatusText = document.getElementById("schedulerStatusText")
       const nextBackupText = document.getElementById("nextBackupText")
       
+      const backupTestText = document.getElementById("backupTestText")
+      const manualBackupButton = document.getElementById("manualbackupButton")
+
       //backupSettings.hidden = true
       saveOutcomeAlert.hidden = true;
+      backupAlert.hidden = true;
+      manualBackupButton.hidden = true;
       populateSettings()
 
 
@@ -206,6 +214,7 @@
             backupSettings.classList.add("backupVisible")
             if (res['settings'][2] != null){
               backupInput.value = res.settings[2]
+              manualBackupButton.hidden = false;
               backupFreq.value = res.settings[3]
             }
           }
@@ -253,14 +262,32 @@
         const response = await fetch("/backupDb");
         const res = await response.json();
         console.log(res);
+        backupTestText.innerHTML = res.text
+
+        
       }
 
+      async function testBackupDir(){
+        event.preventDefault()
+        formdata = new FormData()
+        formdata.append("backupDir", backupInput.value)
+        const response = await fetch("/test_backup_dir",{
+          method: 'POST',
+          body: formdata
+        });
+        const res = await response.json();
+        console.log(res)
+        backupTestText.innerHTML = res.testResult
+      }
 
       async function saveSettings(){
         event.preventDefault();
         if (saveOutcomeAlert.hidden == false){
           saveOutcomeAlert.hidden = true;
         }
+        backupTestText.innerHTML = ""
+        backupAlert.innerHTML = ""
+        backupAlert.hidden = true;
         let error = false
         formstuff = new FormData();
 
@@ -269,15 +296,8 @@
 
           if (backupInput.value == ""){
             //set alert to notify that you need to set a directory if backups are on.
-            if (!backupAlert.classList.contains("alert-danger")){
-              backupAlert.classList.add("alert-danger")
-            }
             backupAlert.innerText = "You need to designate a directory to save your backups to."
-            error = true;
-          }
-          else if (backupInput.value.slice(-1) != "/"){
-            
-            backupAlert.innerText = "Your backup location must end in a / (because it's a directory!)"
+            backupAlert.hidden = false;
             error = true;
           }
           else
@@ -312,9 +332,9 @@
           }
           else if (updateRes.ok == "false"){
             console.log("did not update because of an error");
-            outcome = updateRes.ok;
+            outcome = updateRes.error;
           }
-          saveOutcomeAlert.innerText = outcome;
+          saveOutcomeAlert.innerHTML = outcome;
           saveOutcomeAlert.hidden = false;
         }
       

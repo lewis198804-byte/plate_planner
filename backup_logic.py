@@ -3,6 +3,8 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.jobstores.sqlalchemy import SQLAlchemyJobStore
 from datetime import datetime, timezone
 import sqlite3
+from pathlib import Path
+import shutil
 #---------------------code dealing with backup for recipe DB-----------------------
 
 
@@ -18,8 +20,49 @@ scheduler.configure(jobstores=jobstore)
 
 
 def backup_recipe_db():
+    con = sqlite3.connect("database.db")
+    con.row_factory = sqlite3.Row
+    cur = con.cursor()
+    grabLocation = cur.execute("SELECT backup_location FROM settings")
+    locRes = grabLocation.fetchone()
+    con.close()
+    databasePath = Path("database.db")
+    try:
+        shutil.copy2(databasePath,locRes['backup_location'])
+        return True
+    except Exception as e:
+        print("backup not copied",e)
+        return  False
+
     print("scheduled print command")
 
+
+
+def checkBackupDir(directory):
+    
+    if directory == "":
+        return {"resultText": "<span style='color:red'>Directory cannot be empty</span>", "testResult": False}
+
+    homeDir = Path.home()
+    dirPath = Path(directory)
+    #joinedDir = homeDir.joinpath(dirPath)
+    print("submitted directory:",dirPath)
+    print("home directory:", Path.home())
+    if dirPath.is_dir():
+        print("it's a directory")
+        try:
+            testfile = dirPath.joinpath("testTouch.txt")
+            testfile.touch()
+            testfile.unlink()
+            return {"resultText": "<span style='color:green'>Can write to this directory</span>", "testResult": True}
+        except:
+            print("no permissions for this directory")
+            return {"resultText":"<span style='color:red'>Unable to write to this directory, likely permissions issue</span>", "testResult": False}
+
+        
+    else:
+        return {"resultText": "<span style='color:red'>Submitted directory is not a directory</span>", "testResult":False}
+   
 
 def start_scheduler():
 
@@ -51,9 +94,18 @@ def getNextBackupTime():
     backupJob = scheduler.get_job("backup_job")
     return backupJob.next_run_time.ctime()
 
-def turn_on_backups(interval:int):
+def turn_on_backups(interval:int,backupDir = ""):
+    #check to see if the program has access to the directory that the user has chosen 
+    if backupDir != "":
+        dirCheck = checkBackupDir(backupDir)
+        if dirCheck == True:
+            print("can read and write to directory")
+            #can make changes to the backup directory
+        else:
+            print("cant read and write to directory",backupDir)
+            #cannot make changes to the directory or it is an invalid directory
     scheduler.add_job(backup_recipe_db, "interval", days=interval,id="backup_job", replace_existing=True)
-    if scheduler.state is 0:
+    if scheduler.state == 0:
         start_scheduler()
     backupJob = scheduler.get_job("backup_job")
     return backupJob.next_run_time
