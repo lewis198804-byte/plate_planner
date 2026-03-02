@@ -51,7 +51,10 @@ def init_database():
     "location TEXT," \
     "page_nu INTEGER," \
     "instructions JSON," \
-    "photo_path TEXT,"\
+    "photo_path TEXT," \
+    "category TEXT," \
+    "tags TEXT," \
+    "desc TEXT,"\
     "difficulty TEXT)")
     cur.execute("CREATE TABLE IF NOT EXISTS ingredients (" \
     "id INTEGER PRIMARY KEY AUTOINCREMENT," \
