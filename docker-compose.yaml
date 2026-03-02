@@ -5,6 +5,6 @@ services:
       - "5002:5002"
     volumes:
       - ./data:/app/data  # SQLite DB + backups persist here
-      - ./.env
+      - ./.env:/app/.env
     environment:
       - FLASK_ENV=production
