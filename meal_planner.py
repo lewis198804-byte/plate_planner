@@ -58,7 +58,7 @@ def init_database():
     "name TEXT," \
     "recipe_id INTEGER)")
     cur.execute("CREATE TABLE IF NOT EXISTS apscheduler_jobs (" \
-    "id VARCHAR(191) PRIMARY KEY AUTOINCREMENT," \
+    "id VARCHAR(191) PRIMARY KEY," \
     "next_run_time FLOAT," \
     "job_state BLOB)")
     cur.execute("CREATE TABLE IF NOT EXISTS settings (" \
