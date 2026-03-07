@@ -53,7 +53,7 @@ def checkBackupDir(directory):
             testfile = dirPath.joinpath("testTouch.txt")
             testfile.touch()
             testfile.unlink()
-            return {"resultText": "<span style='color:green'>Can write to this directory</span>", "testResult": True}
+            return {"resultText": f"<span style='color:green'>Can write to this directory</span> home Path: {homeDir} , submitted Path: {dirPath}", "testResult": True}
         except:
             print("no permissions for this directory")
             return {"resultText":"<span style='color:red'>Unable to write to this directory, likely permissions issue</span>", "testResult": False}
