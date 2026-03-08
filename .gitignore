@@ -18,6 +18,6 @@ Thumbs.db
 # Local DB/data
 *.db
 *.sqlite*
-.env
+
 
 sql_queries.sql
