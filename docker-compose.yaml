@@ -1,22 +1,26 @@
 services:
   init-dirs:
     image: busybox
-    command: mkdir -p /data /static/recipe_images && chmod 777 /data /static/recipe_images
+    command: |
+      mkdir -p /data /static/recipe_images /app/backups &&
+      chmod 777 /data /static/recipe_images /app/backups
     volumes:
       - ./data:/data
       - ./static/recipe_images:/static/recipe_images
+      - ${BACKUP_DIR:-./backups}:/app/backups  
 
   app:
     build: .
     ports:
       - "5002:5002"
+    env_file:  
+      - .env
     volumes:
-      - ./data:/app/data  # SQLite DB + backups persist here
-      - ./.env:/app/.env
-      - ./static/recipe_images:/app/static/recipe_images  # ← NEW: Images safe forever
-      - ${BACKUP_DIR:-/tmp/backups}:/app/backups
+      - ./data:/app/data
+      - ./static/recipe_images:/app/static/recipe_images
+      - ${BACKUP_DIR:-./backups}:/app/backups  
     environment:
       - FLASK_ENV=production
-      - BACKUP_DIR=${BACKUP_DIR:-/tmp/backups}
+      - BACKUP_DIR=${BACKUP_DIR:-./backups}  
     depends_on:
       - init-dirs
