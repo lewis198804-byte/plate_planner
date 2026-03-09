@@ -29,31 +29,27 @@
               <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
                   <li class="nav-item">
-                    <a class="nav-link" aria-current="page" href="/">Home</a>
+                    <a class="nav-link active" aria-current="page" href="/">Home</a>
                   </li>
                   <li class="nav-item">
                     <a class="nav-link" href="/recipes">Recipes</a>
                   </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href="/add_recipe">Manual Add</a>
+                   <li class="nav-item">
+                    <a class="nav-link" href="/add_type">Add Recipe</a>
                   </li>
-                  <li class="nav-item" >
-                    <a class="nav-link" href="/ai_recipe_add">AI Add</a>
-                  </li>
+               
                   <li class="nav-item" >
                     <a class="nav-link" href="/shopping_list">Shopping List</a>
                   </li>
                   <li class="nav-item" >
-                    <a class="nav-link active" href="/settings">Settings</a>
+                    <a class="nav-link" href="/settings">Settings</a>
                   </li>
                 </ul>
               </div>
             </div>
           </nav>
         </header>
-            <div class=" text-center mt-5 mx-auto" >
-                <h1>Plate Planner</h1>
-            </div>
+            
         </header>
     </section>
     <section>
@@ -65,7 +61,7 @@
                         <a class=" btn btn-small btn-light" data-bs-toggle="offcanvas" data-bs-target="#newMenuOffcanvas" aria-controls="newMenuOffcanvas"> New plan </a> 
                       </div>
                   </div>
-          <div class="row row-cols-2 row-cols-md-3 justify-content-center" id="meal_plan_showcase">
+          <div class="row row-cols-2 row-cols-md-3 justify-content-center gy-3" id="meal_plan_showcase">
 
           </div>
         </div>
@@ -270,7 +266,7 @@
                 }
                 meal_plan_contents += '\
                 <div class="col ">\
-                  <div class="card '+highlight_today+' mt-4 position-relative animate_animated animate__bounceIn">\
+                  <div class="card '+highlight_today+' mt-4 position-relative animate_animated animate__bounceIn" style="height:100%;">\
                       <a href="/view_recipe?q='+recipe['id']+'" >\
                     <img onload="setLoaded()" src="'+photoPath+'" class="recipe-img card-img-top img-thumbnail" style="height: 150px; object-fit: cover;" alt="...">\
                     </a>\
@@ -296,15 +292,14 @@
                 console.log("this recipe id:", dayObj[day]['id'] )
                 meal_plan_contents += '\
                 <div class="col ">\
-                  <div class="card '+highlight_today+' mt-4 position-relative animate_animated animate__bounceIn">\
+                  <div class="card '+highlight_today+' mt-4 position-relative animate_animated animate__bounceIn" style="height:100%;">\
                       \
                     <img onload="setLoaded()" src="/static/emptyPlate.jpg" class="recipe-img card-img-top img-thumbnail" style="height: 150px; object-fit: cover;" alt="...">\
                     \
                     <div class="card-body">\
                     '+today_badge+'\
-                      <h3 class="text-center">No Recipe set!</h3>\
                       <div class="flex text-center">\
-                      <a onclick="setSearchModal(\''+day+'\',\'false\')" class="btn btn-sm btn-light" data-bs-toggle="modal" data-bs-target="#changeRecipeModal">Set recipe</a>\
+                      <a onclick="setSearchModal(\''+day+'\',\'false\')" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#changeRecipeModal">Choose Meal</a>\
                       </div>\
                     </div>\
                   </div>\

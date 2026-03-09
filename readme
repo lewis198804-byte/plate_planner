@@ -3,3 +3,10 @@
 2. compose path : docker-compose.yaml
 
 3. Create .env file in container root and add open_ai_key
+
+
+*BACKUPS
+
+1. docker compose holds variable for default backup directory if none set in portainer environment (/tmp/backups)
+
+2. if enabling backups, create the folder you want to store them in, then pass the path to this folder to the container via portainer environment variable (BACKUP_DIR). Defaults to /app/backups

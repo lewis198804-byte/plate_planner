@@ -164,6 +164,10 @@ def test_api():
     return testCall
 
 
+@app.route("/add_type")
+def new_recipe():
+    return render_template("add_type.html")
+
 @app.route("/add_recipe")
 def add_recipe():
     return render_template("add_recipe.html")
@@ -297,7 +301,7 @@ def get_recipes():
 
     con = sqlite3.connect("data/database.db")
     cur = con.cursor()
-    selectQuery = "SELECT * FROM recipes"+category+""+paginationQuery+"ORDER BY id "+orderDir+" LIMIT 5"
+    selectQuery = "SELECT * FROM recipes"+category+""+paginationQuery+"ORDER BY id "+orderDir+" LIMIT 11"
     print(selectQuery)
 
     cur.execute(selectQuery)

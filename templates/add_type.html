@@ -15,27 +15,6 @@
     <!--JS that gets laoded once the site has been rendered.-->
     <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
   
-    <style>
-
-      #backupSettings{
-        max-height: 0;
-        overflow: hidden;
-        transition: max-height 0.9s ease;
-      }
-      #backupSettings.backupVisible {
-       max-height: 250px; /* adjust to fit your content */
-      }
-
-
-    </style>
-
-
-
-
-
-  
-  
-  
   </head>
 
   <body>
@@ -48,21 +27,21 @@
                 <span class="navbar-toggler-icon"></span>
               </button>
               <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav">
+               <ul class="navbar-nav">
                   <li class="nav-item">
-                    <a class="nav-link" href="/">Home</a>
+                    <a class="nav-link"  href="/">Home</a>
                   </li>
                   <li class="nav-item">
                     <a class="nav-link" href="/recipes">Recipes</a>
                   </li>
                    <li class="nav-item">
-                    <a class="nav-link" href="/add_type">Add Recipe</a>
-                  </li>      
+                    <a class="nav-link active" aria-current="page" href="/add_type">Add Recipe</a>
+                  </li>
                   <li class="nav-item" >
                     <a class="nav-link" href="/shopping_list">Shopping List</a>
                   </li>
                   <li class="nav-item" >
-                    <a class="nav-link active" aria-current="page" href="/settings">Settings</a>
+                    <a class="nav-link" href="/settings">Settings</a>
                   </li>
                 </ul>
               </div>
@@ -70,77 +49,24 @@
           </nav>
         </header>
             <div class=" text-center mt-5 mx-auto" >
-                <h1>Settings</h1>
+                <h1>Add New Recipe</h1>
             </div>
         </header>
     </section>
     <section>
         <div class="container ">
-          <div class="row">
-            <div class="alert p-3 text-center" id="saveOutcome">
-              <!--insert save outcome here via JS-->
-            </div>
-          </div>
-          <div class="row   mt-5">
-            <div class="col col-12 col-md-6 text-start">
-              <div class=" p-3">
-                Check your API key is detected and working correctly! 
-              </div>
-            </div>
-            <div class="col col-12 col-md-6">
-              <div class="p-1 text-center">
-                <form >
-                  <div class="form-floating">
-                    
-                    <input type="text" id="apiTextInput" disabled class="form-control bg-success-subtle" placeholder="Open AI Api Key" data-bs-toggle="tooltip" data-bs-placement="top"
-                      data-bs-custom-class="custom-tooltip"
-                      data-bs-title="Make changes to your API key by editing your .env file.">
-                    <label for="api_key" class="form-label">Open AI Api Key</label>
-                      <div class="form-text" id="apiConfigText">
-                        <!--input api status here-->
-                      </div>
-                      <div>
-                        <span id="testResult" class="small p-1"></span> <br><button class="mt-1 btn btn-primary" disabled id="testKeyButton" onclick="testApi()">Test key</button>
-                      </div>
-
-                  </div>
-
+            <div class="row justify-content-md-center ">
+                 <div class="col col-md-6 ">
+                    <div class=" text-center">
+                        
+                            <div><a href="/ai_recipe_add" class="btn btn-primary mt-3"> Ai Recipe Add</a></div>
+                            <div><a href="/add_recipe" class="btn btn-primary mt-3">Manual Recipe Add</a></div>
+                        
+                    </div>
+                </div>
                 
-              </div>
             </div>
-            <div class="col col-12 col-md-6 text-start">
-              <div class=" p-3">
-                Create backups of your recipe database?
-              </div>
-            </div>
-            <div class="col col-12 col-md-6">
-              <div class="p-3 text-start" >
-                <div class="form-check form-switch">
-                  <input class="form-check-input" type="checkbox" role="switch" id="backupToggleSwitch" onchange="toggleBackupSettingsVis()">
-                </div>
-                <div id="backupSettings" class="mt-4">
-                  <div id="schedulerStatusText"></div>
-                  <div id="nextBackupText"></div>
-                  <select class="form-select" id="backupFrequency">
-                    <option value="1">Daily</option>
-                    <option value="7">Every 7 days</option>
-                    <option value="14">Fortnightly</option>
-                  </select>
-                  
-                  <label for="formFile" class="small">Backup Location</label>
-                  <div id="backup_loc_text"></div>
-                  <button class="btn btn-primary" id="m_backup" onclick="backupManual()"> Manual Backup</button>
-                  <div id="backupTestText"></div>
-                </div>
-                <div class="small alert p-1 mt-2 alert-danger" id="backupAlert">
-                    <!--insert backup info here via JS-->
-                  </div>
-                </div>
-            </div>
-            <div class="col col-12 text-center">
-              <button class="btn btn-primary" id="saveButton" onclick="saveSettings()">Save</button>
-            </div>
-          </form>
+        </div>
     </section>
    
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
