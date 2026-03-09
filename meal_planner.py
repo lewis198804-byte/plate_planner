@@ -86,6 +86,8 @@ def init_database():
 
 load_dotenv()
 OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
+BACKUP_DIR = os.getenv('BACKUP_DIR')
+
 app = Flask(__name__)
 app.json.sort_keys = False
 
