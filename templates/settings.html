@@ -175,7 +175,6 @@
       //backupSettings.hidden = true
       saveOutcomeAlert.hidden = true;
       backupAlert.hidden = true;
-      manualBackupButton.disabled = true;
       populateSettings()
 
 
@@ -212,7 +211,6 @@
             backupToggle.checked = true;
             backupSettings.classList.add("backupVisible")
             if (res['settings'][2] != null){
-              manualBackupButton.disabled = false;
               backupFreq.value = res.settings[3]
             }
             backup_loc_text.innerText = res.backup_location
@@ -298,7 +296,6 @@
             console.log("settings has been updated");
             outcome = "Settings saved successfully!";
             nextDate = new Date(updateRes.next_backup)
-            manualBackupButton.disabled = false;
             const newLocalTime = nextDate.toLocaleString(); 
             nextBackupText.innerText =  "Next backup is due on "+newLocalTime
             saveOutcomeAlert.classList.add("alert-success")
